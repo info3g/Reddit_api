@@ -29,10 +29,15 @@ body=[]
 
 class StAPIView(APIView):
 	def get(self, request,format=None):
-		
 		all_keys = request.query_params.get('keyword',None)
 		start_date = request.query_params.get('start_date',None)
 		end_date = request.query_params.get('end_date',None)
+		if all_keys[0]=='h' and all_keys[1]=='t' and all_keys[2]=='t' and all_keys[3]=='p':
+			all_d=all_keys.split('/')
+			all_keys=all_d[-2]
+			if len(all_keys)==1:
+				all_keys=all_d[-1]
+		print(all_keys)
 		z=redditdata.objects.filter(keyword=all_keys).exists()
 		if z==True:
 			reddit = praw.Reddit(client_id = 'GZ4wXpp55Rzjqw',
@@ -102,7 +107,7 @@ class StAPIView(APIView):
 			return Response(df2)
 		else:
 			print("This keyword is not exists in database please run post api")
-			return Response("This keyword is not exists in database please run post api")
+			return Response("This keyword(url) is not exists in database please run post api")
 			
 
 
@@ -117,6 +122,12 @@ class postredditapi(APIView):
 	def post(self, request, format=None):
 		keyword = request.data.get('keyword',None)
 		print("ffdf",keyword)
+		if keyword[0]=='h' and keyword[1]=='t' and keyword[2]=='t' and keyword[3]=='p':
+			ke=keyword.split('/')
+			keyword=ke[-2]
+			if len(keyword)==1:
+				keyword=ke[-1]
+		print(keyword)
 		# z=redditdata.objects.filter(keyword=keyword).exists()
 		# print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",z)
 
@@ -132,30 +143,33 @@ class postredditapi(APIView):
 		body=[]
 		all_date = []
 		key=[]
-		for submission in reddit.subreddit(keywords).top('all'):
-			title.append(submission.title)
-			score.append(submission.score)
-			id_.append(submission.id)
-			url.append(submission.url)
-			created.append(submission.created)
-			body.append(submission.selftext)
-			all_date.append(datetime.fromtimestamp(submission.created))
-		# print(title)
-		for i in range(len(body)):
-			key.append(keywords)
+		try:
+			for submission in reddit.subreddit(keywords).top('all'):
+				title.append(submission.title)
+				score.append(submission.score)
+				id_.append(submission.id)
+				url.append(submission.url)
+				created.append(submission.created)
+				body.append(submission.selftext)
+				all_date.append(datetime.fromtimestamp(submission.created))
+			# print(title)
+			for i in range(len(body)):
+				key.append(keywords)
 
-		print(len(title),len(id_),len(score),len(url),len(created),len(body),len(all_date),len(key))
+			print(len(title),len(id_),len(score),len(url),len(created),len(body),len(all_date),len(key))
 
-		for a,b,c,d,e,f,g,h in zip(key,title,all_date,score,id_,url,created,body):
-			# print(a,b,c,d,e,f,g,h)
-			z=redditdata.objects.filter(id_id=e).exists()
-			print(z)
-			if z==True:
+			for a,b,c,d,e,f,g,h in zip(key,title,all_date,score,id_,url,created,body):
+				# print(a,b,c,d,e,f,g,h)
+				z=redditdata.objects.filter(id_id=e).exists()
 				print(z)
-				continue
-			else:
-				data_save = redditdata(keyword=a,title=b,all_date=c, score=d,id_id=e,
-					url=f,created=g,body=h)
-				data_save.save()
-				print("saved successfully")
-		return Response("keyword is updated")
+				if z==True:
+					print(z)
+					continue
+				else:
+					data_save = redditdata(keyword=a,title=b,all_date=c, score=d,id_id=e,
+						url=f,created=g,body=h)
+					data_save.save()
+					print("saved successfully")
+			return Response("keyword is updated")
+		except:
+			return Response(" this keyword(url) is not available on raddit")
