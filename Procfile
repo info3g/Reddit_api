@@ -1,1 +1,1 @@
-web: gunicorn jodyapi.wsgi --log-file -
+web: gunicorn Reddit_api.wsgi --log-file -
