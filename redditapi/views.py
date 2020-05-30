@@ -14,6 +14,9 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.contrib.auth.models import User
+from rest_framework import routers, serializers, viewsets
+
 from rest_framework import status
 nltk.download('vader_lexicon')
 from redditapi.serializers import *
@@ -25,6 +28,12 @@ created=[]
 id_id=[]
 all_date=[]
 body=[]
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
 
 
 class StAPIView(APIView):

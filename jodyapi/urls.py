@@ -15,9 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from redditapi.views import postredditapi, StAPIView
+from redditapi.views import *
+from rest_framework import routers
+from django.urls import path, include
+
+router = routers.DefaultRouter()
+router.register('api',UserViewSet)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',include(router.urls)),
 	path('postreddit',postredditapi.as_view(), name ="post reddit"),
 	path('apiget',StAPIView.as_view(), name ="get reddit"),
 ]
