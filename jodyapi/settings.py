@@ -25,7 +25,9 @@ SECRET_KEY = 'dft_hg(*nwa(qhgldmrkixg2xj(00!=!k^6!f)pwkzzqo_cj3@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+
+# ALLOWED_HOSTS = ['p6fa29jvhk.execute-api.us-west-2.amazonaws.com']
 
 
 # Application definition
@@ -39,12 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'redditapi',
+    'corsheaders',
      
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -75,7 +79,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'jodyapi.wsgi.application'
 
-
+CORS_ORIGIN_ALLOW_ALL = True   
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
