@@ -7,6 +7,7 @@ djangorestframework==3.11.0
 idna==2.9
 joblib==0.15.1
 nltk==3.5
+django-cors-headers==3.3.0
 numpy==1.18.4
 pandas==1.0.3
 praw==7.0.0
