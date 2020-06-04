@@ -25,6 +25,7 @@ router.register('api',UserViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include(router.urls)),
-	path('postreddit',postredditapi.as_view(), name ="post reddit"),
-	path('apiget',StAPIView.as_view(), name ="get reddit"),
+    path('postreddit',postredditapi.as_view(), name ="post reddit"),
+    path('apiget',StAPIView.as_view(), name ="get reddit"),
+    path('downloadcsv/',downloadcsvapi.as_view(), name="get downloadcsv"),
 ]
